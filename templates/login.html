@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Login | Art Gallery{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2>Login</h2>
+  <form method="POST">
+    <input type="email" name="email" placeholder="Enter Email" required>
+    <input type="password" name="password" placeholder="Enter Password" required>
+    <button type="submit" class="explore-btn">Login</button>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div>
+        {% for category, message in messages %}
+          <p style="color:red;">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+</div>
+{% endblock %}

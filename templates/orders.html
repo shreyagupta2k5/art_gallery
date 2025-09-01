@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Orders | Art Gallery{% endblock %}
+
+{% block content %}
+<section class="orders">
+  <h2>Your Orders</h2>
+  <table>
+    <tr>
+      <th>Artwork</th>
+      <th>Artist</th>
+      <th>Price</th>
+      <th>Status</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+      <td>{{ order.artwork }}</td>
+      <td>{{ order.artist }}</td>
+      <td>${{ order.price }}</td>
+      <td>{{ order.status }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+{% endblock %}

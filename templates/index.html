@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Home | Art Gallery{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="overlay"></div>
+  <div class="hero-text">
+    <h1 class="title">The Starry Night</h1>
+    <p class="artist">By Vincent Van Gogh</p>
+    <a href="{{ url_for('artworks') }}" class="explore-btn">✨ Explore Collection</a>
+  </div>
+</section>
+{% endblock %}
