@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Admin Dashboard</h2>
+    <div class="row text-center">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white p-3 shadow">
+                <h4>{{ users }}</h4>
+                <p>Total Users</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white p-3 shadow">
+                <h4>{{ artists }}</h4>
+                <p>Total Artists</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white p-3 shadow">
+                <h4>{{ artworks }}</h4>
+                <p>Total Artworks</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white p-3 shadow">
+                <h4>{{ orders }}</h4>
+                <p>Total Orders</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <a href="{{ url_for('admin.manage_users') }}" class="btn btn-primary">Manage Users</a>
+        <a href="{{ url_for('admin.manage_artists') }}" class="btn btn-success">Manage Artists</a>
+        <a href="{{ url_for('admin.manage_artworks') }}" class="btn btn-warning">Manage Artworks</a>
+        <a href="{{ url_for('admin.manage_orders') }}" class="btn btn-danger">Manage Orders</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,20 +1,25 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
+from admin_routes import admin_bp   # ✅ Import admin blueprint
 
 app = Flask(__name__)
 app.secret_key = "secret123"
 print("Flask app initialized")
 
-# Database connection helper
+# ✅ Register the admin blueprint
+app.register_blueprint(admin_bp)
+
+# ------------------- DATABASE CONNECTION -------------------
 def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Yuvika@2005",
+        password="Shreya@2005",
         database="ArtGallery"
     )
 
+# ------------------- HOME PAGE -------------------
 @app.route("/")
 def home():
     db = get_db_connection()
@@ -29,6 +34,7 @@ def home():
     db.close()
     return render_template("index.html", artworks=artworks)
 
+# ------------------- ARTWORK DETAILS -------------------
 @app.route("/artwork/<int:artwork_id>")
 def artwork_detail(artwork_id):
     db = get_db_connection()
@@ -44,6 +50,7 @@ def artwork_detail(artwork_id):
     db.close()
     return render_template("artwork.html", artwork=artwork)
 
+# ------------------- SIGNUP -------------------
 @app.route("/signup", methods=["GET","POST"])
 def signup():
     if request.method == "POST":
@@ -51,7 +58,7 @@ def signup():
         email = request.form["email"]
         password = request.form["password"]
 
-        hashed_pw = generate_password_hash(password)  # secure password storage
+        hashed_pw = generate_password_hash(password)  # Secure password
 
         db = get_db_connection()
         cursor = db.cursor(dictionary=True)
@@ -67,11 +74,14 @@ def signup():
         return redirect(url_for("login"))
     return render_template("signup.html")
 
+# ------------------- LOGIN -------------------
+from werkzeug.security import check_password_hash
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        email = request.form["email"]
-        password = request.form["password"]
+        email = request.form.get("email")
+        password = request.form.get("password")
 
         db = get_db_connection()
         cursor = db.cursor(dictionary=True)
@@ -80,14 +90,35 @@ def login():
         cursor.close()
         db.close()
 
-        if user and check_password_hash(user["password"], password):
-            session["user_id"] = user["user_id"]
-            flash("Login successful!", "success")
-            return redirect("/")
+        if user:
+            stored_password = user["password"]
+
+            # ✅ If password is hashed → check hash, else compare plain text
+            try:
+                password_matches = check_password_hash(stored_password, password)
+            except ValueError:
+                password_matches = stored_password == password
+
+            if password_matches:
+                session["user_id"] = user["user_id"]
+                session["role"] = user["role"]
+                flash("Login successful!", "success")
+
+                # ✅ Redirect admin to dashboard
+                if user["role"] == "admin":
+                    return redirect(url_for("admin.dashboard"))
+                else:
+                    return redirect(url_for("home"))
+            else:
+                flash("Invalid password!", "danger")
         else:
-            flash("Invalid credentials", "danger")
+            flash("User not found!", "danger")
+
     return render_template("login.html")
 
+
+
+# ------------------- PLACE AN ORDER -------------------
 @app.route("/order/<int:artwork_id>", methods=["GET", "POST"])
 def orders(artwork_id):
     if "user_id" not in session:
@@ -115,12 +146,15 @@ def orders(artwork_id):
 
     return render_template("order.html", artwork=artwork)
 
+# ------------------- LOGOUT -------------------
 @app.route("/logout")
 def logout():
     session.pop("user_id", None)
+    session.pop("role", None)  # ✅ Clear role from session
     flash("Logged out successfully", "info")
     return redirect("/")
 
+# ------------------- DUMMY ARTWORKS PAGE -------------------
 @app.route("/artworks")
 def artworks():
     artworks = [
@@ -151,7 +185,7 @@ def artworks():
     ]
     return render_template("artworks.html", artworks=artworks)
 
-
+# ------------------- VIEW ALL ORDERS -------------------
 @app.route("/orders")
 def orders_page():
     if "user_id" not in session:
@@ -170,6 +204,7 @@ def orders_page():
     db.close()
     return render_template("orders.html", orders=orders)
 
+# ------------------- MY ORDERS -------------------
 @app.route("/my-orders")
 def my_orders():
     if "user_id" not in session:
@@ -189,7 +224,6 @@ def my_orders():
 
     return render_template("my_orders.html", orders=orders)
 
-
-    
+# ------------------- RUN APP -------------------
 if __name__ == "__main__":
     app.run(debug=True)
