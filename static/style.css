@@ -35,7 +35,7 @@ body {
 /* Hero */
 .hero {
   height: 100vh;
-  background: url("/static/images/starrynight.jpg") center/cover no-repeat;
+  background: url("/static/images/art_gallery.jpg") center/cover no-repeat;
   position: relative;
   display: flex;
   justify-content: center;
@@ -108,22 +108,38 @@ body {
 }
 .art-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, 1fr); /* 4 artworks per row */
   gap: 20px;
   padding: 40px;
+  justify-items: center;
 }
 .art-card {
   background: rgba(255,255,255,0.05);
   border-radius: 20px;
   padding: 20px;
   transition: transform 0.3s;
-}
-.art-card:hover {
-  transform: translateY(-10px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* keeps text + button aligned */
+  height: 100%; /* ensures cards fill evenly in the grid */
 }
 .art-card img {
   width: 100%;
+  height: 300px;          /* fixed height for images */
+  object-fit: cover;      /* crop without distortion */
   border-radius: 15px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 1024px) {
+  .art-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 per row on tablets */
+  }
+}
+@media (max-width: 600px) {
+  .art-grid {
+    grid-template-columns: 1fr; /* 1 per row on mobile */
+  }
 }
 
 /* Orders Table */

@@ -181,6 +181,30 @@ def artworks():
             "artist": "Edvard Munch",
             "price": 250,
             "image": "scream.jpg"
+        },
+                {
+            "title": "The Hay Wain",
+            "artist": "John Constable",
+            "price": 180,
+            "image": "haywain.jpg"
+        },
+        {
+            "title": "Liberty Leading the People",
+            "artist": "Eugène Delacroix",
+            "price": 400,
+            "image": "liberty.jpg"
+        },
+        {
+            "title": "Napoleon Crossing the Alps",
+            "artist": "Jacques-Louis David",
+            "price": 350,
+            "image": "napolean.jpg"
+        },
+        {
+            "title": "Water Lilies",
+            "artist": "Claude Monet",
+            "price": 280,
+            "image": "waterlily.jpg"
         }
     ]
     return render_template("artworks.html", artworks=artworks)
