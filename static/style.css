@@ -42,7 +42,11 @@ body {
   align-items: center;
 }
 .hero .overlay {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0,0,0,0.5);
 }
 .hero-text {
@@ -106,13 +110,17 @@ body {
   margin-top: 120px;
   text-align: center;
 }
+
+/* ===== FIXED ART TILES ===== */
 .art-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 artworks per row */
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   padding: 40px;
-  justify-items: center;
+  justify-items: stretch;
+  align-items: stretch;
 }
+
 .art-card {
   background: rgba(255,255,255,0.05);
   border-radius: 20px;
@@ -120,25 +128,43 @@ body {
   transition: transform 0.3s;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* keeps text + button aligned */
-  height: 100%; /* ensures cards fill evenly in the grid */
+  justify-content: space-between;
+  height: 450px; /* uniform card height */
 }
+
 .art-card img {
   width: 100%;
-  height: 300px;          /* fixed height for images */
-  object-fit: cover;      /* crop without distortion */
+  height: 250px; /* fixed image height */
+  object-fit: cover;
   border-radius: 15px;
+}
+
+/* titles & descriptions */
+.art-card h3,
+.art-card p {
+  margin: 10px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* allow 2 lines max */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Responsive tweaks */
 @media (max-width: 1024px) {
   .art-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 per row on tablets */
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .art-card {
+    height: 400px;
   }
 }
 @media (max-width: 600px) {
   .art-grid {
-    grid-template-columns: 1fr; /* 1 per row on mobile */
+    grid-template-columns: 1fr;
+  }
+  .art-card {
+    height: auto; /* let expand naturally on mobile */
   }
 }
 
@@ -164,6 +190,12 @@ body {
 
 /* Animations */
 @keyframes fadeInUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

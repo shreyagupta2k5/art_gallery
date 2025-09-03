@@ -7,10 +7,11 @@
   <div class="art-grid">
     {% for art in artworks %}
     <div class="art-card">
-      <img src="{{ url_for('static', filename='images/' + art.image) }}" alt="{{ art.title }}">
+      <img src="{{ url_for('static', filename='images/' ~ art.image) }}" alt="{{ art.title }}">
       <h3>{{ art.title }}</h3>
       <p>By {{ art.artist }}</p>
-      <button class="explore-btn">Buy Now</button>
+      <p>₹{{ art.price }}</p>
+      <a href="{{ url_for('artwork_detail', artwork_id=art.artwork_id) }}">View Details</a>
     </div>
     {% endfor %}
   </div>

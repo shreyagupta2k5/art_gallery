@@ -15,7 +15,7 @@ def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Shreya@2005",
+        password="Yuvika@2005",
         database="ArtGallery"
     )
 
@@ -155,59 +155,85 @@ def logout():
     return redirect("/")
 
 # ------------------- DUMMY ARTWORKS PAGE -------------------
+# @app.route("/artworks")
+# def artworks():
+#     artworks = [
+#         {
+#             "title": "Starry Night",
+#             "artist": "Vincent van Gogh",
+#             "price": 200,
+#             "image": "starrynight.jpg"
+#         },
+#         {
+#             "title": "Mona Lisa",
+#             "artist": "Leonardo da Vinci",
+#             "price": 500,
+#             "image": "monalisa.jpg"
+#         },
+#         {
+#             "title": "The Persistence of Memory",
+#             "artist": "Salvador Dalí",
+#             "price": 300,
+#             "image": "persistence.jpg"
+#         },
+#         {
+#             "title": "The Scream",
+#             "artist": "Edvard Munch",
+#             "price": 250,
+#             "image": "scream.jpg"
+#         },
+#                 {
+#             "title": "The Hay Wain",
+#             "artist": "John Constable",
+#             "price": 180,
+#             "image": "haywain.jpg"
+#         },
+#         {
+#             "title": "Liberty Leading the People",
+#             "artist": "Eugène Delacroix",
+#             "price": 400,
+#             "image": "liberty.jpg"
+#         },
+#         {
+#             "title": "Napoleon Crossing the Alps",
+#             "artist": "Jacques-Louis David",
+#             "price": 350,
+#             "image": "napolean.jpg"
+#         },
+#         {
+#             "title": "Water Lilies",
+#             "artist": "Claude Monet",
+#             "price": 280,
+#             "image": "waterlily.jpg"
+#         }
+#     ]
+#     return render_template("artworks.html", artworks=artworks)
+
+# ------------------- VIEW ALL ARTWORKS -------------------
 @app.route("/artworks")
 def artworks():
-    artworks = [
-        {
-            "title": "Starry Night",
-            "artist": "Vincent van Gogh",
-            "price": 200,
-            "image": "starrynight.jpg"
-        },
-        {
-            "title": "Mona Lisa",
-            "artist": "Leonardo da Vinci",
-            "price": 500,
-            "image": "monalisa.jpg"
-        },
-        {
-            "title": "The Persistence of Memory",
-            "artist": "Salvador Dalí",
-            "price": 300,
-            "image": "persistence.jpg"
-        },
-        {
-            "title": "The Scream",
-            "artist": "Edvard Munch",
-            "price": 250,
-            "image": "scream.jpg"
-        },
-                {
-            "title": "The Hay Wain",
-            "artist": "John Constable",
-            "price": 180,
-            "image": "haywain.jpg"
-        },
-        {
-            "title": "Liberty Leading the People",
-            "artist": "Eugène Delacroix",
-            "price": 400,
-            "image": "liberty.jpg"
-        },
-        {
-            "title": "Napoleon Crossing the Alps",
-            "artist": "Jacques-Louis David",
-            "price": 350,
-            "image": "napolean.jpg"
-        },
-        {
-            "title": "Water Lilies",
-            "artist": "Claude Monet",
-            "price": 280,
-            "image": "waterlily.jpg"
-        }
-    ]
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="Yuvika@2005",
+        database="ArtGallery"
+    )
+    cursor = conn.cursor(dictionary=True)
+
+    query = """
+        SELECT a.artwork_id, a.title, ar.name AS artist, a.price, a.image
+        FROM Artworks a
+        JOIN Artists ar ON a.artist_id = ar.artist_id;
+        WHERE a.title NOT IN ('The Weeping Woman', 'Starry Night')
+    """
+    cursor.execute(query)
+    artworks = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
     return render_template("artworks.html", artworks=artworks)
+
 
 # ------------------- VIEW ALL ORDERS -------------------
 @app.route("/orders")
